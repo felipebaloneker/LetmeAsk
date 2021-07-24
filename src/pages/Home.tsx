@@ -15,7 +15,7 @@ export function Home(){
             <main>
                 <div className="main-content">
                     <img src={logoImg} alt="Letmeask" />
-                    <button>
+                    <button className='create-room'>
                         <img src={googleIconImg} alt="Logo do google" />
                         Crie uma Sala com google
                     </button>
