@@ -1,7 +1,6 @@
 // Hooks
 import {useHistory} from 'react-router-dom' // acessar objeto history para progrmar outras Rotas
-import {useContext} from 'react' 
-import {AuthContext} from '../App'
+
 // Importando Imagens
 import illustrationImg from '../assets/images/illustration.svg';
 import logoImg from '../assets/images/logo.svg';
@@ -10,10 +9,11 @@ import googleIconImg from '../assets/images/google-icon.svg';
 // Importando Components e Estilos
 import '../styles/auth.scss';
 import {Button} from "../components/Button"
+import { useAuth } from '../hooks/useAuth';
 
 export function Home(){
     const history = useHistory();
-    const {user , signInWithGoogle} = useContext(AuthContext)
+    const {user , signInWithGoogle} = useAuth();
 
     async function handleCreateRoom(){
         if(!user){
