@@ -1,32 +1,35 @@
+import { FormEvent, useState } from 'react';
+import {Link, useHistory} from 'react-router-dom'
+
 import illustrationImg from '../assets/images/illustration.svg';
 import logoImg from '../assets/images/logo.svg';
 
-import '../styles/auth.scss';
 import {Button} from "../components/Button"
-import {Link, useHistory} from 'react-router-dom'
 import { useAuth } from '../hooks/useAuth';
-import { FormEvent, useState } from 'react';
 import { database } from '../services/firebase';
+import '../styles/auth.scss';
 
 export function NewRoom(){
-    const {user} = useAuth();
+    const {user} = useAuth()
     const [newRoom, setNewRoom] = useState('');
     const history = useHistory();
+    
     // Função para Criar novas Salas
     async function handleCreateRoom(event: FormEvent){
-        //Prevenindo comportamento padrão do formulario
         event.preventDefault();
 
         if(newRoom.trim() === ''){
-            return;
-        }
-        const roomRef = database.ref('rooms')
-        const firebaseRoom = await roomRef.push({
-            title: newRoom,
-            authorId: user?.id,
-        })
-        history.push(`/rooms/${firebaseRoom.key}`);
-    }
+             return;
+         }
+
+         const roomRef = database.ref('rooms'); 
+
+         const firebaseRoom = await roomRef.push({
+             title: newRoom,
+             authorId: user?.id,
+         });
+         history.push(`/rooms/${firebaseRoom.key}`)
+    }  
 
     return(
         <div id='page-auth'>
@@ -42,17 +45,16 @@ export function NewRoom(){
                     <form onSubmit={handleCreateRoom}>
                         <input 
                         type="text"
-                        placeholder="Digite o código da sala"
+                        placeholder="Nome da sala"
                         onChange={event => setNewRoom(event.target.value)}
-                        value={newRoom}
                         />
                         <Button type='submit'>
                             Criar sala
                         </Button>
-                        <p>
-                            Quer entrar em uma sala existente?<Link to="/">clique aqui</Link>
-                        </p>
                     </form>
+                    <p>
+                        Quer entrar em uma sala existente?<Link to="/">clique aqui</Link>
+                    </p>
                 </div>
             </main>
         </div>
