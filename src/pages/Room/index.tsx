@@ -1,12 +1,13 @@
-import logoImg from '../assets/images/logo.svg';
+import logoImg from '../../assets/images/logo.svg';
 import { Button } from '../../components/Button';
 import { RoomCode } from '../../components/RoomCode';
 import { useParams } from 'react-router';
 
-import '../styles.scss'
+import './styles.scss'
 import { FormEvent, useEffect, useState } from 'react';
 import { useAuth } from '../../hooks/useAuth';
 import { database } from '../../services/firebase';
+import { Question } from '../../components/Question';
 
 type FirebaseQuestions = Record<string, {
     author:{
@@ -18,7 +19,7 @@ type FirebaseQuestions = Record<string, {
     isAnswered:boolean;
 }>
 
-type Questions = {
+type QuestionType = {
     id: string;
     author:{
         name:string;
@@ -41,7 +42,7 @@ export function Room(){
     // Pegando Informação da Pergunta
     const {user} = useAuth();
     const [newQuestion, setNewQuestion] = useState('');
-    const [questions, setQuestions] = useState<Questions[]>([]);
+    const [questions, setQuestions] = useState<QuestionType[]>([]);
     const [title, setTitle] = useState('');
 
     //Carregando Dados da Sala
@@ -126,6 +127,18 @@ export function Room(){
                    </div>
                </form>
 
+            {/* Mostrando Perguntas em Tela */}
+            <div className='question-list'>
+                {questions.map(question =>{
+                    return(
+                        <Question
+                        key={question.id}
+                        content={question.content}
+                        author={question.author}
+                        />
+                    );
+                })}
+            </div>
            </main>
        </div>
     )
