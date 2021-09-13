@@ -2,7 +2,7 @@ import logoImg from '../../assets/images/logo.svg';
 import deleteImg from '../../assets/images/delete.svg';
 import { Button } from '../../components/Button';
 import { RoomCode } from '../../components/RoomCode';
-import { useParams } from 'react-router';
+import { useHistory, useParams } from 'react-router';
 
 import { database } from '../../services/firebase';
 import { Question } from '../../components/Question';
@@ -15,10 +15,18 @@ type RoomParams = {
 
 export function AdminRoom(){
     //Pegando o Id da Sala
+    const history = useHistory();
     const params = useParams<RoomParams>();
     const roomId = params.id
     const {title, questions} = useRoom(roomId)
 
+    async function handleEndRoom(){
+        await database.ref(`rooms/${roomId}`).update({
+            endedAt: new Date(), 
+        })
+
+        history.push('/');
+    }
     async function handleDeleteQuestion(questionId: string){
         if(window.confirm('Tem Certeza que deseja excluir está pergunta?')){
             await database.ref(`rooms/${roomId}/questions/${questionId}`).remove();
@@ -32,7 +40,7 @@ export function AdminRoom(){
                    <img src={logoImg} alt="Letmeask"/>
                    <div>
                     <RoomCode code={roomId}/>
-                    <Button isOutlined>Encerrar Sala</Button>
+                    <Button isOutlined onClick={handleEndRoom}>Encerrar Sala</Button>
                    </div>
                </div>
            </header>
